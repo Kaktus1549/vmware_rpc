@@ -1,12 +1,16 @@
+from vm_ware import VMWare
 from pypresence import Presence
 from time import time, sleep
-import json
+import json, os
+
+if os.path.exists("./config/") == False:
+    os.mkdir("./config/")
 
 try:
     # Load config
     print("Trying to load config...")
     try:
-        with open("settings.json", "r") as f:
+        with open("./config/settings.json", "r") as f:
             config = json.load(f)
     except FileNotFoundError:
         
@@ -16,7 +20,7 @@ try:
         config ={
         "application_id": "ID_HERE"
         }
-        with open("settings.json", "w") as f:
+        with open("./config/settings.json", "w") as f:
             json.dump(config, f, indent=4)
         print("Config file created!")
         print("Please fill in the config file and restart the program!")
@@ -25,6 +29,19 @@ try:
         
         # If error while loading config file
         print("Error while loading config file!")
+        print(e)
+        exit()
+
+    print("Loading images...")
+    try:
+        with open("./config/vms.json", "r") as f:
+            images = json.load(f)
+    except FileNotFoundError:
+        images = {}
+        with open("./config/vms.json", "w") as f:
+            json.dump(images, f, indent=4)
+    except Exception as e:
+        print("Error while loading images!")
         print(e)
         exit()
 
@@ -43,17 +60,38 @@ try:
     print("Connected to Discord!")
     start_time = time()
 
-    def rpc_update(vm_hostname, vm_os, start_time, image_key):
-        rpc.update(
-            state="OS: " + vm_os,
-            details="Hostname: " + vm_hostname,
-            large_image=image_key,
-            large_text="Virtualizing...",
-            start=start_time
-        )
+    def rpc_update(status, vm_hostname, vm_os, start_time, image_key):
+        # Status 1 -> some vm is running
+        # Status 2 -> no vm is running
+        
+        if status == 1:
+            if vm_hostname == None:
+                detail = "Virtualizing..."
+            else:
+                detail = "Hostname: " + vm_hostname
+            rpc.update(
+                state="OS: " + vm_os,
+                details=detail,
+                large_image=image_key,
+                large_text="Virtualizing...",
+                start=start_time
+            )
+        elif status == 2:
+            rpc.update(
+                state="No VMs running",
+                details="I am not virtualizing yet!",
+                large_image=images["no_vm"],
+                large_text="VMware Workstation Pro",
+                start=start_time
+            )
+        else:
+            raise Exception(f"Invalid status: {status}")
 
+    vm_instance = VMWare()
+    
     while True:
-        rpc_update("KaliCTF", "Kali Linux", start_time, "kali-image")
+        status, vm_hostname, vm_os, image_key = vm_instance.process_running_vms()
+        rpc_update(status, vm_hostname, vm_os, start_time, image_key)
         sleep(15)
 except KeyboardInterrupt:
     rpc.close()
