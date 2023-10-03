@@ -57,10 +57,10 @@ try:
         sleep(15)
 except KeyboardInterrupt:
     rpc.close()
-    print("Disconnected from Discord!")
+    print("\nDisconnected from Discord!")
     print("Exiting...")
     exit()
 except Exception as e:
-    print("Error!")
+    print("\nError!")
     print(e)
     exit()
