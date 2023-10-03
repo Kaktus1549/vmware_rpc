@@ -2,7 +2,7 @@ import subprocess
 import json, os
 
 class VMWare:
-    def __init__(self):
+    def __init__(self, vmrun_path):
         try:
             with open("./config/vms.json", "r") as f:
                 vms = json.load(f)
@@ -13,11 +13,11 @@ class VMWare:
         except Exception as e:
             raise Exception(f"Error while loading vms.json: {e}")
         self.vms = vms
-        self.vmrun_path = r'"C:\\Program Files (x86)\\VMware\\VMware Workstation\\vmrun.exe"'
+        self.vmrun_path = vmrun_path
 
     def get_running_vms(self):
         try:
-            process_output = subprocess.check_output(f"{self.vmrun_path} list", shell=True)
+            process_output = subprocess.check_output(f'"{self.vmrun_path}" list', shell=True)
             # splits the output into a list of lines and then removes the path from each line, so that only the VM name is left (e.g. "C:\Users\user\Documents\Virtual Machines\KaliCTF\KaliCTF.vmx" -> "KaliCTF.vmx")
             # skip the first line because it's just the header and remove \r from the end of each line
             return [line.split("\\")[-1].rstrip("\r") for line in process_output.decode().split("\n")[1:] if line != ""]
@@ -51,6 +51,3 @@ class VMWare:
                 image_key = self.vms["default"]
         return 1, hostname, os, image_key
 
-test = VMWare()
-print(test.get_running_vms())
-print(test.process_running_vms())

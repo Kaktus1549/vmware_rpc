@@ -18,7 +18,8 @@ try:
         print("Config file not found!")
         print("Creating config file...")
         config ={
-        "application_id": "ID_HERE"
+        "application_id": "ID_HERE",
+        "vmrun_path": "PATH_HERE"
         }
         with open("./config/settings.json", "w") as f:
             json.dump(config, f, indent=4)
@@ -87,7 +88,10 @@ try:
         else:
             raise Exception(f"Invalid status: {status}")
 
-    vm_instance = VMWare()
+    if config["vmrun_path"] == "PATH_HERE":
+        print("Please fill in the config file and restart the program!")
+        exit()
+    vm_instance = VMWare(config["vmrun_path"])
     
     while True:
         status, vm_hostname, vm_os, image_key = vm_instance.process_running_vms()
