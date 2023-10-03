@@ -53,7 +53,7 @@ try:
         )
 
     while True:
-        rpc_update("KaliCTF", "Kali Linux", start_time, "kali-image")
+        rpc_update()
         sleep(15)
 except KeyboardInterrupt:
     rpc.close()
