@@ -4,6 +4,22 @@ VMware RPC is a python script that displays the running virtual machines on disc
 
 ## Installation
 
+You can download .tar.gz/.zip file here: [VMware RPC](https://github.com/Kaktus1549/vmware_rpc/releases/latest)
+To unpack the file you can use this commands:
+
+For .tar.gz file:
+
+```bash
+tar -xvf vmware_rpc.tar.gz
+```
+
+For .zip file:
+
+```bash
+unzip vmware_rpc.zip
+```
+
+
 To install dependencies for this script, run the following command:
 
 ```bash
