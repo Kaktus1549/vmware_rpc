@@ -1,2 +1,4 @@
 test.py
 settings.json
+__pycache__
+config/

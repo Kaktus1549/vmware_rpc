@@ -58,10 +58,14 @@ class VMWare:
             return 2, None, None, None
         newest_vm = running_vms[len(running_vms) - 1]
         if newest_vm not in self.vms:
+            if self.vms["default"] == None:
+                image = ""
+            else:
+                image = self.vms["default"]
             self.vms[newest_vm] = {
                 "hostname": "",
                 "os": newest_vm.split(".")[0],
-                "image_key": ""
+                "image_key": image
             }
             with open("./config/vms.json", "w") as f:
                 json.dump(self.vms, f, indent=4)
