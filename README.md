@@ -41,7 +41,7 @@ Here is an example of the config file:
 ### Application ID
 
 To get the application ID, you will need to create a discord application. You can do this by going to the [Discord Developer Portal](https://discord.com/developers/applications) and clicking on "New Application". After creating the application, you can find the application ID under the "General Information" tab.
-There is also "Rich Presence" tab, you can add images to rich presence. Image keys mean the name of the image
+There is also "Rich Presence" tab, you can add images to rich presence. Image keys mean the name of the image.
 <br>Example -> image key is here "kali-image"
 
 ![example](./images/image_key.png)
